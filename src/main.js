@@ -13,18 +13,18 @@ const hooks = require('./hooks.js')
 const Guild = require('./guild.js')
 const Session = require('./session.js')
 
+
+
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  if (client.user.tag.includes('Test')) {
-  }
   
   client.guilds.forEach(g => {
     const guild = new Guild(g, DATA_CHANNEL_NAME)
-    guild.init()
 
     Session.data.guilds[g.id] = guild
   })
 });
+
 
 client.on('message', msg => {
   const content = msg.content

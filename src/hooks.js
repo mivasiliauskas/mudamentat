@@ -3,19 +3,23 @@ const Session = require('./session.js')
 
 const hooks = {
   infomarry: function (msg) {
-    const storage = Session.getStorage(msg)
-    const embed = msg.embeds[0]
+    Session.storage.then(async storage => {
 
-    const name = embed.author.name
-    if (storage.get(name) === null) {
-      console.log(`Character '${name}' not found. Registering`)
-      const description = embed.description
-      const image = `<${embed.image.url}>`
-      storage.set(name, {
-        description,
-        image
-      })
-    }
+      const embed = msg.embeds[0]
+
+      const name = embed.author.name
+      if (await storage.get(name) === null) {
+        console.log(`Character '${name}' not found. Registering`)
+        const description = embed.description.replace(/\n/g, ' ').replace(/ <:\w*:.*/, '')
+        console.log(description)
+        const image = `<${embed.image.url}>`
+        storage.set(name, {
+          description,
+          image,
+          name
+        })
+      }
+    })
   },
   mymarry: function(msg) {
     const requestId = Session.createRequestId(msg, 'mymarry')
@@ -23,21 +27,23 @@ const hooks = {
     if (requestIndex < 0) {
       return
     }
-    const storage = Session.getStorage(msg)
-    const embed = msg.embeds[0]
-    const description = embed.description
-    const characters = description.substring(2).split('\n')
-    characters.forEach(name => {
-      const character = storage.get(name)
-      let image = null
-      let description = null
-      if (character != null) {
-        image = character.image
-        description = character.description
-      }
-      postImage(msg, name, image, description)
+    Session.storage.then(async storage => {
+
+      const embed = msg.embeds[0]
+      const description = embed.description
+      const characters = description.substring(2).split('\n')
+      characters.forEach(async name => {
+        const character = await storage.get(name)
+        let image = null
+        let description = null
+        if (character != null) {
+          image = character.image
+          description = character.description
+        }
+        postImage(msg, name, image, description)
+      })
+      Session.data.marryRequests.splice(requestIndex, 1)
     })
-    Session.data.marryRequests.splice(requestIndex, 1)
   }
 }
 
@@ -80,7 +86,7 @@ class Hooks {
       hookName = 'mymarry'
     }
 
-    if (hookName != null && Session.data.guilds[msg.guild.id].hooks[hookName]) {
+    if (hookName != null) {
       hooks[hookName](msg)
     }
   }

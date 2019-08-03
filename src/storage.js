@@ -1,43 +1,30 @@
+const MongoClient = require('mongodb').MongoClient;
+
 class Storage {
   constructor() {
     this.data = {}
-    this.dataMessage = null
+    this.characters = null
   }
 
-  init(dataChannel) {
-    this.dataChannel = dataChannel
-
-    return dataChannel.fetchMessages({limit: 1}).then((messages) =>
-    {
-      const message = messages.first()
-      if (message == null) {
-        console.log('No data found. Initializing')
-        this.storeData().then(m => {
-          this.dataMessage = m
-        })
-      } else {
-        this.data = JSON.parse(message.content)
-        this.dataMessage = message
-      }
-    })
+  async init() {
+    const uri = process.env.DB_CONNECTION_STRING.replace('DB_NAME', process.env.DB_NAME)
+    const client = new MongoClient(uri, { useNewUrlParser: true });
+    await client.connect()
+    this.characters = await client.db(process.env.DB_NAME).collection("characters");
   }
   
-  get(key) {
-    return this.data[key] || null
-  }
-
-  set(key, value) {
-    this.data[key] = value
-    this.storeData()
-  }
-
-  storeData() {
-    const content = JSON.stringify(this.data)
-    if (this.dataMessage == null) {
-      return this.dataChannel.send(content).catch(console.error)
-    } else {
-      return this.dataMessage.edit(content).catch(console.error)
+  async get(key) {
+    let value = this.data[key] || null
+    if (value == null) {
+      value = await this.characters.findOne({name: key})
+      this.data[key] = value
     }
+    return value
+  }
+
+  async set(key, value) {
+    this.data[key] = value
+    await this.characters.insertOne(value)
   }
 }
 
