@@ -54,7 +54,7 @@ function postImage(msg, name, link, description) {
     embed.setThumbnail(link)
     embed.setDescription(description)
   } else {
-    embed.setDescription(`No image recorded yet. Try using command '$infomarry ${name}'`)
+    embed.setDescription(`Character not recorded yet, try running command: \`\`\`$infomarry ${name}\`\`\``)
   }
 
   let content = {
