@@ -15,11 +15,16 @@ const commands = {
     }
   },
   mymarry_ : function (msg) {
-    const marryRequests = Session.data.marryRequests
-    const requestId = Session.createRequestId(msg, 'mymarry')
-    if (!marryRequests.includes(requestId)) {
-      marryRequests.push(requestId)
-    }
+    Session.data.requests[msg.guild.id] = 'mymarry'
+  },
+  infomarry: function (msg) {
+    Session.data.requests[msg.guild.id] = 'character'
+  },
+  waifu: function (msg) {
+    Session.data.requests[msg.guild.id] = 'character'
+  },
+  mudamentatdata: async function(msg) {
+    console.log((await Session.storage).data)
   }
 }
 

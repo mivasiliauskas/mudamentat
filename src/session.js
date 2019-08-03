@@ -3,7 +3,7 @@ const Storage = require('./storage.js')
 class Session {
   static data = {
     guilds: {},
-    marryRequests: [],
+    requests: {},
   }
 
   static _storage = null

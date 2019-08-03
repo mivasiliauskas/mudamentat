@@ -2,9 +2,8 @@ const Discord = require('discord.js');
 const Session = require('./session.js')
 
 const hooks = {
-  infomarry: function (msg) {
+  character: function (msg) {
     Session.storage.then(async storage => {
-
       const embed = msg.embeds[0]
 
       const name = embed.author.name
@@ -13,20 +12,16 @@ const hooks = {
         const description = embed.description.replace(/\n/g, ' ').replace(/ <:\w*:.*/, '')
         console.log(description)
         const image = `<${embed.image.url}>`
-        storage.set(name, {
+        await storage.set(name, {
           description,
           image,
           name
         })
+        msg.react('📌')
       }
     })
   },
   mymarry: function(msg) {
-    const requestId = Session.createRequestId(msg, 'mymarry')
-    const requestIndex = Session.data.marryRequests.findIndex(i => i === requestId)
-    if (requestIndex < 0) {
-      return
-    }
     Session.storage.then(async storage => {
 
       const embed = msg.embeds[0]
@@ -42,7 +37,6 @@ const hooks = {
         }
         postImage(msg, name, image, description)
       })
-      Session.data.marryRequests.splice(requestIndex, 1)
     })
   }
 }
@@ -77,18 +71,23 @@ class Hooks {
       return
     }
     const embed = msg.embeds[0]
-    const description = embed.description
 
-    let hookName = null
-    if (description.includes('Claims') && description.includes('Likes')) {
-      hookName = 'infomarry'
-    } else if (embed.author.name.endsWith('\'s harem')) {
-      hookName = 'mymarry'
+    const requestId = msg.guild.id
+    if (!Session.data.requests[requestId]) {
+      return
     }
+    // let hookName = null
+    // if (description.includes('Claims') && description.includes('Likes')) {
+    //   hookName = 'character'
+    // } else if (embed.author.name.endsWith('\'s harem')) {
+    //   hookName = 'mymarry'
+    // }
+    const hookName = Session.data.requests[requestId]
 
     if (hookName != null) {
       hooks[hookName](msg)
     }
+    delete Session.data.requests[requestId]
   }
 }
 
