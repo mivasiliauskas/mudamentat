@@ -30,7 +30,6 @@ class Commands {
   }
 
   handle(msg, cmd, argLine){
-    // console.log(msg)
     if (!this.commandKeys.includes(cmd)) {
       // suppress - probably command for another bot
       return

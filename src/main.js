@@ -28,7 +28,6 @@ client.on('ready', () => {
 
 client.on('message', msg => {
   const content = msg.content
-  console.log(msg.member.user.username)
   if (content.startsWith(COMMAND_PREFIX)) {
     let cmdSeparatorIndex = content.search(/\s/)
     if (cmdSeparatorIndex < 0) {

@@ -11,7 +11,6 @@ const hooks = {
       console.log(`Character '${name}' not found. Registering`)
       const description = embed.description
       const image = `<${embed.image.url}>`
-      console.log(image)
       storage.set(name, {
         description,
         image
@@ -19,7 +18,6 @@ const hooks = {
     }
   },
   mymarry: function(msg) {
-    console.log(Session.data.marryRequests)
     const requestId = Session.createRequestId(msg, 'mymarry')
     const requestIndex = Session.data.marryRequests.findIndex(i => i === requestId)
     if (requestIndex < 0) {
@@ -40,8 +38,6 @@ const hooks = {
       postImage(msg, name, image, description)
     })
     Session.data.marryRequests.splice(requestIndex, 1)
-    console.log(Session.data.marryRequests)
-
   }
 }
 
