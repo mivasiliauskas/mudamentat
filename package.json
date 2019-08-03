@@ -1,0 +1,18 @@
+{
+    "name": "hands-on-deck",
+    "version": "0.0.1",
+    "description": "Custom Deck Bot",
+    "main": "src/main.js",
+    "author": "Mindaugas Vasiliauskas",
+    "scripts": {
+        "start": "node .",
+        "dev": "nodemon ."
+    },
+    "dependencies": {
+        "discord.js": "^11.5.1",
+        "dotenv": "^8.0.0"
+    },
+    "devDependencies": {
+        "nodemon": "^1.19.1"
+    }
+}
