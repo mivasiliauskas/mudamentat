@@ -1,7 +1,7 @@
 {
-    "name": "hands-on-deck",
+    "name": "mudamentat",
     "version": "0.0.1",
-    "description": "Custom Deck Bot",
+    "description": "Mudae utility bot",
     "main": "src/main.js",
     "author": "Mindaugas Vasiliauskas",
     "scripts": {
