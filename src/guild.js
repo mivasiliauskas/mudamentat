@@ -15,7 +15,10 @@ class Guild {
     let channel = this.guildInstance.channels.find(c => c.name === this.dataChannelName)
     if (channel === null) {
       console.log('Channel not found, creating new')
-      channel = this.guildInstance.createChannel(this.dataChannelName)
+      channel = this.guildInstance.createChannel(this.dataChannelName).then(() => {
+        this.init()
+      })
+      return
     }
 
     this.storage.init(channel).then(() => {
