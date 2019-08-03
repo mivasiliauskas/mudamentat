@@ -5,6 +5,7 @@ const client = new Discord.Client();
 
 const COMMAND_PREFIX = '$'
 const MASTER_NAME = 'Mudae'
+const MAID_NAME = 'Mudamaid'
 const DATA_CHANNEL_NAME = 'mudaementat-data'
 
 const commands = require('./commands.js')
@@ -37,7 +38,7 @@ client.on('message', msg => {
     const cmd = content.substring(1, cmdSeparatorIndex)
     const args = content.substr(cmdSeparatorIndex + 1)
     commands.handle(msg, cmd, args)
-  } else if (msg.author.username == MASTER_NAME) {
+  } else if (msg.author.username == MASTER_NAME || msg.author.username.startsWith(MAID_NAME)) {
     hooks.handle(msg)
   }
 });
