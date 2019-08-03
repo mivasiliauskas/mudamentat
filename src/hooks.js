@@ -19,6 +19,12 @@ const hooks = {
     }
   },
   mymarry: function(msg) {
+    console.log(Session.data.marryRequests)
+    const requestId = Session.createRequestId(msg, 'mymarry')
+    const requestIndex = Session.data.marryRequests.findIndex(i => i === requestId)
+    if (requestIndex < 0) {
+      return
+    }
     const storage = Session.getStorage(msg)
     const embed = msg.embeds[0]
     const description = embed.description
@@ -33,6 +39,9 @@ const hooks = {
       }
       postImage(msg, name, image, description)
     })
+    Session.data.marryRequests.splice(requestIndex, 1)
+    console.log(Session.data.marryRequests)
+
   }
 }
 

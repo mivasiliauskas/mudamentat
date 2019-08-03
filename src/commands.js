@@ -14,9 +14,9 @@ const commands = {
       msg.channel.send(`Hook '${hookName}' not found`).catch(console.error)
     }
   },
-  mymarry : function (msg) {
+  mymarry_ : function (msg) {
     const marryRequests = Session.data.marryRequests
-    const requestId = Session.createRequestId(msg)
+    const requestId = Session.createRequestId(msg, 'mymarry')
     if (!marryRequests.includes(requestId)) {
       marryRequests.push(requestId)
     }
